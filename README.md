@@ -7,7 +7,7 @@ A collection of [TrafficMonitor](https://github.com/zhongyang219/TrafficMonitor)
 | Plugin | Directory | Description | Status |
 |--------|-----------|-------------|--------|
 | **DeepSeek Balance** | [`DeepSeek/`](DeepSeek/) | DeepSeek API account balance | ✅ Ready |
-| Codex | `codex/` | OpenAI Codex CLI usage/credits | 🚧 Planned |
+| **Codex Balance** | [`Codex/`](Codex/) | OpenAI / Codex CLI usage & balance | ✅ Ready |
 | Gemini | `gemini/` | Google Gemini API usage | 🚧 Planned |
 | Claude | `claude/` | Anthropic Claude API usage | 🚧 Planned |
 | *(more TBD)* | | | |
@@ -39,6 +39,64 @@ Stored in `DeepSeekBalance.ini` under TrafficMonitor's config directory:
 ```ini
 [Settings]
 ApiKey=sk-you...-key
+FetchInterval=30
+```
+
+| 插件 | 查询内容 | 接口类型 | 认证方式 |
+|------|---------|---------|---------|
+| **DeepSeek Balance** | 余额 | 官方 API (`/user/balance`) | API Key (`sk-...`) |
+| **Codex Balance** | 累计花费 + 余额 | Dashboard API (优先) + `/organization/costs` (回退) | Session Cookie 优先，API Key 回退 |
+
+## Codex Balance
+
+Displays OpenAI / Codex CLI usage in the taskbar. Two data sources with priority fallback:
+
+### Priority 1 — Session Cookie (full billing access)
+
+Headers set automatically by WinHTTP — paste the `__session` cookie value from your browser after logging into [platform.openai.com](https://platform.openai.com).
+
+```
+GET https://api.openai.com/dashboard/billing/usage
+GET https://api.openai.com/dashboard/billing/subscription
+```
+
+Provides: month-to-date spend, daily breakdown, account balance (credits/grants).
+
+### Priority 2 — API Key (fallback)
+
+If no session cookie is configured, falls back to the official costs API:
+
+```
+GET https://api.openai.com/v1/organization/costs
+```
+
+Provides: month-to-date spend only (no balance/credit info).
+
+### Display modes
+
+| Auth mode | Taskbar example | Budget configured | Balance available |
+|-----------|----------------|-------------------|-------------------|
+| Session + budget | `Codex: $47.21 / $120.00` | ✅ Yes | ✅ Yes |
+| Session only | `Codex: $47.21 \| $72.79 left` | ❌ No | ✅ Yes |
+| API key + budget | `Codex: $47.21 / $120.00` | ✅ Yes | ❌ No |
+| API key only | `Codex: $47.21` | ❌ No | ❌ No |
+
+### Installation
+
+1. Download `CodexBalance.dll` from [Releases](https://github.com/Likhixang/AILiv/releases)
+2. Copy to `<TrafficMonitor>/plugins/`
+3. Restart TrafficMonitor, enable in **Plugin Management**
+4. Right-click → **Options** / **Settings** to configure auth
+
+### Configuration
+
+Stored in `CodexBalance.ini` under TrafficMonitor's config directory:
+
+```ini
+[Settings]
+SessionCookie=__session=eyJ...           ; Priority 1 (optional)
+ApiKey=sk-proj-...                        ; Priority 2 fallback (optional)
+MonthlyBudget=120                         ; Optional, for progress display
 FetchInterval=30
 ```
 

@@ -16,3 +16,4 @@ endif()
 # ============================================================
 
 add_subdirectory(DeepSeek)
+add_subdirectory(Codex)

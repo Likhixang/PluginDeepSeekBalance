@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/li_khixang/AILiv/Codex/PluginCodexBalance.rc
+resource.h
+/home/li_khixang/AILiv/Codex/resource.h
+
+/home/li_khixang/AILiv/Codex/resource.h
+

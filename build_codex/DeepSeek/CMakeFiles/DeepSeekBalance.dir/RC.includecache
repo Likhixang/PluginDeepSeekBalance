@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/li_khixang/AILiv/DeepSeek/PluginDeepSeekBalance.rc
+resource.h
+/home/li_khixang/AILiv/DeepSeek/resource.h
+
+/home/li_khixang/AILiv/DeepSeek/resource.h
+
