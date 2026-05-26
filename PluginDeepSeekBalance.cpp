@@ -170,7 +170,7 @@ const wchar_t* PluginDeepSeekBalance::GetInfo(PluginInfoIndex index)
     case TMI_COPYRIGHT:
         return L"Copyright (C) 2025";
     case TMI_VERSION:
-        return L"1.3";
+        return L"1.4";
     case TMI_URL:
         return L"https://github.com/Likhixang/PluginDeepSeekBalance";
     default:
@@ -199,6 +199,14 @@ static INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPAR
     case WM_COMMAND:
         switch (LOWORD(wParam))
         {
+        case IDC_REFRESH_BUTTON:
+            if (pPlugin)
+            {
+                pPlugin->ForceRefresh();
+                pPlugin->DataRequired();
+            }
+            return TRUE;
+
         case IDOK:
             if (pPlugin)
             {

@@ -21,6 +21,9 @@ add_library(${PROJECT_NAME} SHARED
 
 target_link_libraries(${PROJECT_NAME} PRIVATE winhttp)
 
+# Static link MinGW runtime so the DLL has no external DLL dependencies on Windows
+target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++)
+
 set_target_properties(${PROJECT_NAME} PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
