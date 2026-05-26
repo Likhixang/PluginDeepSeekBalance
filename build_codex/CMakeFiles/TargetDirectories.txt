@@ -1,8 +1,0 @@
-/home/li_khixang/AILiv/build_codex/CMakeFiles/edit_cache.dir
-/home/li_khixang/AILiv/build_codex/CMakeFiles/rebuild_cache.dir
-/home/li_khixang/AILiv/build_codex/DeepSeek/CMakeFiles/DeepSeekBalance.dir
-/home/li_khixang/AILiv/build_codex/DeepSeek/CMakeFiles/edit_cache.dir
-/home/li_khixang/AILiv/build_codex/DeepSeek/CMakeFiles/rebuild_cache.dir
-/home/li_khixang/AILiv/build_codex/Codex/CMakeFiles/CodexBalance.dir
-/home/li_khixang/AILiv/build_codex/Codex/CMakeFiles/edit_cache.dir
-/home/li_khixang/AILiv/build_codex/Codex/CMakeFiles/rebuild_cache.dir
