@@ -1,88 +1,79 @@
-# DeepSeek Balance Plugin for TrafficMonitor
+# AILiv — AI usage monitors for your Windows taskbar
 
-A [TrafficMonitor](https://github.com/zhongyang219/TrafficMonitor) plugin that displays your **DeepSeek API account balance** directly in the taskbar.
+A collection of [TrafficMonitor](https://github.com/zhongyang219/TrafficMonitor) plugins that display AI service usage, balances, and quotas directly in the taskbar.
 
-![Settings dialog](screenshots/settings-dialog.jpg)
+## Plugins
 
-## Features
+| Plugin | Directory | Description | Status |
+|--------|-----------|-------------|--------|
+| **DeepSeek Balance** | [`deepseek/`](deepseek/) | DeepSeek API account balance | ✅ Ready |
+| Codex | `codex/` | OpenAI Codex CLI usage/credits | 🚧 Planned |
+| Gemini | `gemini/` | Google Gemini API usage | 🚧 Planned |
+| Claude | `claude/` | Anthropic Claude API usage | 🚧 Planned |
+| *(more TBD)* | | | |
 
-- **Real-time balance display** — Shows `¥<balance>` or `$<balance>` in the taskbar
-- **Configurable refresh interval** — Default 30 min, adjustable from 1 to 1440 min
-- **Click to open billing page** — Left-click opens `https://platform.deepseek.com/billing`
-- **Settings UI** — Configure API key and interval through a native dialog
-- **Zero external dependencies** — Only uses standard Windows DLLs (WinHTTP, Shell32, etc.)
+---
 
-## Installation
+## DeepSeek Balance
 
-1. Download the latest `PluginDeepSeekBalance.dll` from [Releases](https://github.com/Likhixang/PluginDeepSeekBalance/releases)
-2. Copy it to `<TrafficMonitor>/plugins/` directory
-3. Restart TrafficMonitor
-4. Right-click TrafficMonitor → **Other Functions** → **Plugin Management**
-5. Enable **DeepSeek Balance**
-6. Right-click TrafficMonitor → **Options** / **Settings** to configure your API key
+![Settings dialog](deepseek/screenshots/settings-dialog.jpg)
 
-## Configuration
+Displays your **DeepSeek API account balance** in the taskbar.
 
-The plugin stores settings in `DeepSeekBalance.ini` under TrafficMonitor's config directory:
+**Features:**
+- Real-time balance display — `¥12.34` or `$12.34` in the taskbar
+- Configurable refresh interval (1–1440 min)
+- Left-click opens DeepSeek billing page
+- Native settings dialog for API key & interval
+- Zero external dependencies (WinHTTP only)
+
+### Installation
+
+1. Download `DeepSeekBalance.dll` from [Releases](https://github.com/Likhixang/AILiv/releases)
+2. Copy to `<TrafficMonitor>/plugins/`
+3. Restart TrafficMonitor, enable in **Plugin Management**
+4. Right-click → **Options** / **Settings** to configure API key
+
+### Configuration
+
+Stored in `DeepSeekBalance.ini` under TrafficMonitor's config directory:
 
 ```ini
 [Settings]
-ApiKey=sk-your-deepseek-api-key
+ApiKey=sk-you...-key
 FetchInterval=30
 ```
 
-You can edit this file directly, or use the built-in settings dialog.
-
-## Building from Source
+## Building All Plugins
 
 ### Prerequisites
 
-- **Windows**: Visual Studio 2019+ (with "Desktop development with C++") or CMake + MSVC
+- **Windows**: Visual Studio 2019+ or CMake + MSVC
 - **Linux**: CMake + MinGW-w64 (for cross-compilation)
 
-### Windows (MSVC)
+### From source
 
 ```bash
 mkdir build && cd build
+
+# MSVC
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build . --config Release
-```
 
-Output: `build/plugins/PluginDeepSeekBalance.dll`
-
-### Linux (MinGW cross-compilation)
-
-```bash
-# Install MinGW-w64 (Ubuntu/Debian)
-sudo apt install g++-mingw-w64-x86-64 cmake
-
-mkdir build && cd build
+# Linux MinGW cross-compile
 cmake .. -DCMAKE_TOOLCHAIN_FILE=../mingw-toolchain.cmake
 cmake --build .
 ```
 
-Output: `build/plugins/PluginDeepSeekBalance.dll`
+Output: `build/plugins/*.dll`
 
-## API
+Each plugin compiles independently — you can also build a single one by targeting its name (e.g. `cmake --build . --target DeepSeekBalance`).
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `GET /user/balance` | `GET` | Query DeepSeek account balance |
+## Shared SDK
 
-**Response:**
-```json
-{
-  "is_available": true,
-  "balance_infos": [
-    {
-      "currency": "CNY",
-      "total_balance": "215.07",
-      "granted_balance": "0.00",
-      "topped_up_balance": "215.07"
-    }
-  ]
-}
-```
+[`PluginInterface.h`](PluginInterface.h) sits in the project root and is the official TrafficMonitor plugin SDK. All plugins include it from the parent path.
+
+Future shared utility code (JSON parsing, HTTP helpers, etc.) will also live in the root as it gets extracted from individual plugins.
 
 ## License
 

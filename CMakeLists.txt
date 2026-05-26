@@ -1,31 +1,18 @@
 cmake_minimum_required(VERSION 3.10)
-project(PluginDeepSeekBalance LANGUAGES CXX)
+project(AILiv LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(NOT WIN32)
-    message(FATAL_ERROR "This plugin is only supported on Windows")
+    message(FATAL_ERROR "This project is only supported on Windows")
 endif()
 
-add_library(${PROJECT_NAME} SHARED
-    PluginInterface.h
-    PluginDeepSeekBalance.h
-    PluginDeepSeekBalance.cpp
-    BalanceItem.h
-    BalanceItem.cpp
-    dllmain.cpp
-    resource.h
-    PluginDeepSeekBalance.rc
-)
+# ============================================================
+# AI Liv - TrafficMonitor AI plugin collection
+# Each AI provider gets its own subdirectory with a DLL target.
+# Shared SDK header (PluginInterface.h) and future utility code
+# live in the project root.
+# ============================================================
 
-target_link_libraries(${PROJECT_NAME} PRIVATE winhttp)
-
-# Static link MinGW runtime so the DLL has no external DLL dependencies on Windows
-target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++)
-
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
-    PREFIX ""
-)
+add_subdirectory(deepseek)
