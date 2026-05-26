@@ -16,8 +16,6 @@ A collection of [TrafficMonitor](https://github.com/zhongyang219/TrafficMonitor)
 
 ## DeepSeek Balance
 
-![Settings dialog](deepseek/screenshots/settings-dialog.jpg)
-
 Displays your **DeepSeek API account balance** in the taskbar.
 
 **Features:**
