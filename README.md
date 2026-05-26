@@ -53,14 +53,32 @@ Displays OpenAI / Codex CLI usage in the taskbar. Two data sources with priority
 
 ### Priority 1 — Session Cookie (full billing access)
 
-Headers set automatically by WinHTTP — paste the `__session` cookie value from your browser after logging into [platform.openai.com](https://platform.openai.com).
+Provides month-to-date spend, daily breakdown, and account balance (credits/grants).
 
+**Endpoints (internal, undocumented):**
 ```
 GET https://api.openai.com/dashboard/billing/usage
 GET https://api.openai.com/dashboard/billing/subscription
 ```
 
-Provides: month-to-date spend, daily breakdown, account balance (credits/grants).
+**How to get the session cookie:**
+
+1. In the plugin settings dialog, click **「Get Cookie」** — it opens `https://platform.openai.com/auth/login`
+2. Log in with your OpenAI account
+3. After logging in, open **Browser Developer Tools** (F12):
+   - **Chrome/Edge**: `Application` → `Cookies` → `https://api.openai.com`
+   - **Firefox**: `Storage` → `Cookies` → `https://api.openai.com`
+4. Find the cookie named `__session` (or `Auth0` session cookie)
+5. Copy its full value
+6. Paste it into the **Session Cookie** field in the plugin settings
+
+   > The cookie value is long (a JWT token, ~1000+ characters). Make sure you copy the entire string — it starts with `eyJ` (base64-encoded JSON) or `__session=eyJ...`
+
+7. Click **OK** — the plugin will immediately try to fetch your billing data
+
+**Troubleshooting:**
+- Session cookies expire after a few hours to a few days. When you see `ERR` and your session was working before, re-do steps 2-6.
+- If you see `No Auth`, no cookie or API key is configured.
 
 ### Priority 2 — API Key (fallback)
 

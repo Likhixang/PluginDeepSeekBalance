@@ -11,5 +11,6 @@
 #define IDC_FETCH_INTERVAL_LABEL            1008
 #define IDC_REFRESH_BUTTON                  1009
 #define IDC_AUTH_STATUS                     1010
+#define IDC_LOGIN_BUTTON                    1011
 #define IDOK                                1
 #define IDCANCEL                            2

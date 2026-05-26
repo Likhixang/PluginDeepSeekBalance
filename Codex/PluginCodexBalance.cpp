@@ -2,6 +2,7 @@
 #include "PluginCodexBalance.h"
 #include "resource.h"
 #include <windows.h>
+#include <shellapi.h>
 #include <winhttp.h>
 #include <string>
 #include <vector>
@@ -475,6 +476,12 @@ static INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPAR
                 pPlugin->ForceRefresh();
                 pPlugin->DataRequired();
             }
+            return TRUE;
+
+        case IDC_LOGIN_BUTTON:
+            ShellExecuteW(nullptr, L"open",
+                          L"https://platform.openai.com/auth/login",
+                          nullptr, nullptr, SW_SHOW);
             return TRUE;
 
         case IDOK:
