@@ -9,8 +9,10 @@ A collection of [TrafficMonitor](https://github.com/zhongyang219/TrafficMonitor)
 | **DeepSeek Balance** | [`DeepSeek/`](DeepSeek/) | DeepSeek API account balance | ✅ Ready |
 | **Codex Balance** | [`Codex/`](Codex/) | OpenAI / Codex CLI usage & balance | ✅ Ready |
 | **Claude Balance** | [`Claude/`](Claude/) | Anthropic Claude API usage & cost | ✅ Ready |
-|| **Gemini Balance** | [`Gemini/`](Gemini/) | Google Gemini API usage & cost | ✅ Ready |
-|| **Z.AI Balance** | [`ZAI/`](ZAI/) | Z.AI / Zhipu AI GLM Coding Plan token usage | ✅ Ready |
+| **Gemini Balance** | [`Gemini/`](Gemini/) | Google Gemini API usage & cost | ✅ Ready |
+| **Z.AI Balance** | [`ZAI/`](ZAI/) | Z.AI / Zhipu AI GLM Coding Plan token usage | ✅ Ready |
+| **MiniMax Balance** | [`MiniMax/`](MiniMax/) | MiniMax Token Plan usage | ✅ Ready |
+| **MiMo Balance** | [`MiMo/`](MiMo/) | Xiaomi MiMo Token Plan info (manual) | ✅ Ready |
 
 ---
 
@@ -49,6 +51,8 @@ FetchInterval=30
 | **Claude Balance** | 月累计花费 | 官方 API (`/v1/organizations/cost_report`) | Admin API Key (`***...`) |
 | **Gemini Balance** | 月请求量 | Cloud Monitoring (`request_count`) | GCP Service Account JSON |
 | **Z.AI Balance** | Token 使用量 (5h) | 官方配额 API (`/api/monitor/usage/quota/limit`) | Coding Plan API Token |
+| **MiniMax Balance** | Token 使用量 (5h) | 官方 API (`/v1/token_plan/remains`) | Token Plan Key (`tp-...`) |
+| **MiMo Balance** | — (手动) | 无公开 API | API Key (可选) |
 
 ## Codex Balance
 
@@ -269,6 +273,97 @@ Stored in `ZAIBalance.ini` under TrafficMonitor's config directory:
 [Settings]
 ApiKey=zai-...your-key
 Region=0                        ; 0=International, 1=China
+MonthlyBudget=30
+FetchInterval=30
+```
+
+## MiniMax Balance
+
+Displays your **MiniMax Token Plan** usage in the taskbar. Shows the request quota in the 5-hour rolling window (used / total).
+
+**Auth:** Token Plan Key — create at [platform.minimax.io](https://platform.minimax.io) under Token Plan subscription.
+
+### API
+
+```
+GET https://api.minimax.io/v1/token_plan/remains
+Headers: Authorization: Bearer <token>
+```
+
+Supports two regions:
+- **International:** `api.minimax.io` (default)
+- **China:** `api.minimaxi.com`
+
+Response (note: `usage_count` fields return **remaining**, not used):
+
+```json
+{
+  "current_interval_usage_count": 650,
+  "current_interval_total_count": 1500,
+  "current_weekly_usage_count": 4200,
+  "current_weekly_total_count": 7500,
+  "next_reset_time": 1717000000000
+}
+```
+
+Used = total - remaining (e.g., `1500 - 650 = 850` requests used).
+
+### Display
+
+| Auth mode | Taskbar example | Description |
+|---|---|---|
+| Token Plan key | `MiniMax: 57%` | Usage percentage in 5h window |
+| + budget | `MiniMax: 57% \| $30 cap` | Percentage + budget cap |
+
+### Installation
+
+1. Download `MiniMaxBalance.dll` from [Releases](https://github.com/Likhixang/AILiv/releases)
+2. Copy to `<TrafficMonitor>/plugins/`
+3. Restart TrafficMonitor, enable in **Plugin Management**
+4. Right-click → **Options** / **Settings** → enter Token Plan key
+
+### Configuration
+
+```ini
+[Settings]
+ApiKey=tp-...your-key
+Region=0                        ; 0=Intl, 1=China
+MonthlyBudget=30
+FetchInterval=30
+```
+
+## MiMo Balance
+
+Displays your **Xiaomi MiMo Token Plan** info in the taskbar. 
+
+> ⚠️ **No public balance/usage API available.** This plugin shows your plan tier and credit limit manually selected in settings. The API Key is optional (used for best-effort undocumented endpoint probe only).
+
+### Plans
+
+| Tier | Monthly Credits | Annual Credits |
+|---|---|---|
+| Lite | 60M | 720M |
+| Standard | 200M | 2,400M |
+| Pro | 700M | 8,400M |
+| Max | 1,600M | 19,200M |
+
+Select your plan tier + cycle in the settings dialog to see your plan info in the taskbar.
+
+### Installation
+
+1. Download `MiMoBalance.dll` from [Releases](https://github.com/Likhixang/AILiv/releases)
+2. Copy to `<TrafficMonitor>/plugins/`
+3. Restart TrafficMonitor, enable in **Plugin Management**
+4. Right-click → **Options** / **Settings** → select your plan tier
+
+### Configuration
+
+```ini
+[Settings]
+ApiKey=                         ; Optional (best-effort probe)
+Region=0                        ; 0=PAYG, 1=CN TP, 2=SGP TP, 3=EU TP
+Plan=1                          ; 0=None, 1=Lite, 2=Standard, 3=Pro, 4=Max
+PlanCycle=0                     ; 0=Monthly, 1=Annual
 MonthlyBudget=30
 FetchInterval=30
 ```
