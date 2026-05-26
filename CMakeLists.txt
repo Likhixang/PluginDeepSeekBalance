@@ -24,4 +24,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE winhttp)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
+    PREFIX ""
 )
