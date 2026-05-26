@@ -2,7 +2,7 @@
 
 A [TrafficMonitor](https://github.com/zhongyang219/TrafficMonitor) plugin that displays your **DeepSeek API account balance** directly in the taskbar.
 
-![Screenshot placeholder](https://via.placeholder.com/400x60?text=DS:+¥200.00)
+![Settings dialog](screenshots/settings-dialog.jpg)
 
 ## Features
 
