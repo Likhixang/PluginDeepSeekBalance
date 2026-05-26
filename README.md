@@ -9,7 +9,7 @@ A collection of [TrafficMonitor](https://github.com/zhongyang219/TrafficMonitor)
 | **DeepSeek Balance** | [`DeepSeek/`](DeepSeek/) | DeepSeek API account balance | ✅ Ready |
 | **Codex Balance** | [`Codex/`](Codex/) | OpenAI / Codex CLI usage & balance | ✅ Ready |
 | **Claude Balance** | [`Claude/`](Claude/) | Anthropic Claude API usage & cost | ✅ Ready |
-| Gemini | `gemini/` | Google Gemini API usage | 🚧 Planned |
+| **Gemini Balance** | [`Gemini/`](Gemini/) | Google Gemini API usage & cost | ✅ Ready |
 | *(more TBD)* | | | |
 
 ---
@@ -156,6 +156,52 @@ Stored in `ClaudeBalance.ini` under TrafficMonitor's config directory:
 ```ini
 [Settings]
 AdminApiKey=sk-ant-admin-...
+MonthlyBudget=120
+FetchInterval=30
+```
+
+## Gemini Balance
+
+Displays Google Gemini API usage in the taskbar. Uses a **GCP Service Account** to authenticate with Google Cloud Monitoring API — the same approach Google Gemini CLI / agy uses under the hood (OAuth2 via JWT assertion).
+
+### Auth setup (one-time)
+
+1. Go to [GCP Console → IAM → Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts)
+2. Create a service account → assign **Monitoring Viewer** role
+3. Create a JSON key → download
+4. Open the JSON file in a text editor — copy the **entire content**
+5. Paste it into the plugin settings dialog (multiline edit field)
+
+The plugin parses the JSON, generates a JWT, exchanges it for an OAuth2 token, and queries:
+```
+GET /v3/projects/{project}/timeSeries
+  metric.type = generativeai.googleapis.com/request_count
+```
+
+Returns: month-to-date request count (shown as `12.5K req`).
+
+### Display
+
+| Auth mode | Taskbar example | Budget configured |
+|-----------|----------------|-------------------|
+| Service Account + budget | `Gemini: 12.5K req \| $120 cap` | ✅ Yes |
+| Service Account only | `Gemini: 12.5K req` | ❌ No |
+| No key | `No Key` | — |
+
+### Installation
+
+1. Download `GeminiBalance.dll` from [Releases](https://github.com/Likhixang/AILiv/releases)
+2. Copy to `<TrafficMonitor>/plugins/`
+3. Restart TrafficMonitor, enable in **Plugin Management**
+4. Right-click → **Options** / **Settings** → paste GCP Service Account JSON key
+
+### Configuration
+
+Stored in `GeminiBalance.ini` under TrafficMonitor's config directory:
+
+```ini
+[Settings]
+SaJson={"type":"service_account","project_id":"...","private_key":"-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n","client_email":"...@....iam.gserviceaccount.com",...}
 MonthlyBudget=120
 FetchInterval=30
 ```
