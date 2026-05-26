@@ -9,8 +9,8 @@ A collection of [TrafficMonitor](https://github.com/zhongyang219/TrafficMonitor)
 | **DeepSeek Balance** | [`DeepSeek/`](DeepSeek/) | DeepSeek API account balance | ✅ Ready |
 | **Codex Balance** | [`Codex/`](Codex/) | OpenAI / Codex CLI usage & balance | ✅ Ready |
 | **Claude Balance** | [`Claude/`](Claude/) | Anthropic Claude API usage & cost | ✅ Ready |
-| **Gemini Balance** | [`Gemini/`](Gemini/) | Google Gemini API usage & cost | ✅ Ready |
-| *(more TBD)* | | | |
+|| **Gemini Balance** | [`Gemini/`](Gemini/) | Google Gemini API usage & cost | ✅ Ready |
+|| **Z.AI Balance** | [`ZAI/`](ZAI/) | Z.AI / Zhipu AI GLM Coding Plan token usage | ✅ Ready |
 
 ---
 
@@ -46,6 +46,9 @@ FetchInterval=30
 |------|---------|---------|---------|
 | **DeepSeek Balance** | 余额 | 官方 API (`/user/balance`) | API Key (`sk-...`) |
 | **Codex Balance** | 累计花费 + 余额 | Dashboard API (优先) + `/organization/costs` (回退) | Session Cookie 优先，API Key 回退 |
+| **Claude Balance** | 月累计花费 | 官方 API (`/v1/organizations/cost_report`) | Admin API Key (`***...`) |
+| **Gemini Balance** | 月请求量 | Cloud Monitoring (`request_count`) | GCP Service Account JSON |
+| **Z.AI Balance** | Token 使用量 (5h) | 官方配额 API (`/api/monitor/usage/quota/limit`) | Coding Plan API Token |
 
 ## Codex Balance
 
@@ -201,8 +204,72 @@ Stored in `GeminiBalance.ini` under TrafficMonitor's config directory:
 
 ```ini
 [Settings]
-SaJson={"type":"service_account","project_id":"...","private_key":"-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n","client_email":"...@....iam.gserviceaccount.com",...}
+SaJson={"type":"service_account","project_id":"...","private_key":"[REDACTED PRIVATE KEY]\n","client_email":"...@....iam.gserviceaccount.com",...}
 MonthlyBudget=120
+FetchInterval=30
+```
+
+## Z.AI / Zhipu AI Balance
+
+Displays your **GLM Coding Plan** token usage in the taskbar. Shows the primary quota (5-hour rolling window) as a fraction of tokens used vs total.
+
+**Auth:** Coding Plan API Token — create at [z.ai](https://z.ai) after purchasing a Coding Plan subscription.
+
+### API
+
+```
+GET https://api.z.ai/api/monitor/usage/quota/limit
+Headers: Authorization: Bearer <token>
+```
+
+Supports two regions:
+- **International:** `api.z.ai` (default)
+- **China Mainland:** `open.bigmodel.cn`
+
+Response provides multiple limit types — the plugin uses `TOKENS_LIMIT` as the primary display:
+
+```json
+{
+  "data": {
+    "level": "standard",
+    "planName": "Coding Plan Pro",
+    "limits": [{
+      "type": "TOKENS_LIMIT",
+      "percentage": 45,
+      "used": 4500000,
+      "total": 10000000,
+      "remaining": 5500000,
+      "nextResetTime": 1717000000000
+    }]
+  }
+}
+```
+
+### Display
+
+| Auth mode | Taskbar example | Description |
+|---|---|---|
+| API Key only | `ZAI: 4.5M/10M` | Used/Total tokens in the 5h window |
+| API Key + budget | `ZAI: 45% \| $30 cap` | Percentage + budget cap |
+
+Note: The GLM Coding Plan is subscription-based (not pay-per-token). Quotas reset on a rolling **5-hour window**. The `Monthly Budget` field is optional — set it to track spending against a cost cap ($).
+
+### Installation
+
+1. Download `ZAIBalance.dll` from [Releases](https://github.com/Likhixang/AILiv/releases)
+2. Copy to `<TrafficMonitor>/plugins/`
+3. Restart TrafficMonitor, enable in **Plugin Management**
+4. Right-click → **Options** / **Settings** → enter your Coding Plan API key
+
+### Configuration
+
+Stored in `ZAIBalance.ini` under TrafficMonitor's config directory:
+
+```ini
+[Settings]
+ApiKey=zai-...your-key
+Region=0                        ; 0=International, 1=China
+MonthlyBudget=30
 FetchInterval=30
 ```
 
