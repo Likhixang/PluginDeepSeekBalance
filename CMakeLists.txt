@@ -17,3 +17,4 @@ endif()
 
 add_subdirectory(DeepSeek)
 add_subdirectory(Codex)
+add_subdirectory(Claude)

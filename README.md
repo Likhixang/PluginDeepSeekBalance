@@ -8,8 +8,8 @@ A collection of [TrafficMonitor](https://github.com/zhongyang219/TrafficMonitor)
 |--------|-----------|-------------|--------|
 | **DeepSeek Balance** | [`DeepSeek/`](DeepSeek/) | DeepSeek API account balance | ✅ Ready |
 | **Codex Balance** | [`Codex/`](Codex/) | OpenAI / Codex CLI usage & balance | ✅ Ready |
+| **Claude Balance** | [`Claude/`](Claude/) | Anthropic Claude API usage & cost | ✅ Ready |
 | Gemini | `gemini/` | Google Gemini API usage | 🚧 Planned |
-| Claude | `claude/` | Anthropic Claude API usage | 🚧 Planned |
 | *(more TBD)* | | | |
 
 ---
@@ -115,6 +115,48 @@ Stored in `CodexBalance.ini` under TrafficMonitor's config directory:
 SessionCookie=__session=eyJ...           ; Priority 1 (optional)
 ApiKey=sk-proj-...                        ; Priority 2 fallback (optional)
 MonthlyBudget=120                         ; Optional, for progress display
+FetchInterval=30
+```
+
+## Claude Balance
+
+Displays Anthropic Claude API usage cost in the taskbar. Uses the official documented [Usage & Cost Admin API](https://platform.claude.com/docs/en/manage-claude/usage-cost-api).
+
+**Auth:** Admin API Key (`sk-ant-admin-...`) — created in Claude Console under Organization Settings.
+
+### API
+
+```
+GET https://api.anthropic.com/v1/organizations/cost_report
+Headers: X-Api-Key: sk-ant-admin-...
+         anthropic-version: 2023-06-01
+```
+
+Returns month-to-date cost in USD. The Cost API is the only official billing endpoint — Anthropic has no balance/credit API (postpaid billing).
+
+### Display
+
+| Auth mode | Taskbar example | Budget configured |
+|-----------|----------------|-------------------|
+| Admin Key + budget | `Claude: $47.21 / $120.00` | ✅ Yes |
+| Admin Key only | `Claude: $47.21` | ❌ No |
+| No key | `No Key` | — |
+
+### Installation
+
+1. Download `ClaudeBalance.dll` from [Releases](https://github.com/Likhixang/AILiv/releases)
+2. Copy to `<TrafficMonitor>/plugins/`
+3. Restart TrafficMonitor, enable in **Plugin Management**
+4. Right-click → **Options** / **Settings** → enter your Admin API Key
+
+### Configuration
+
+Stored in `ClaudeBalance.ini` under TrafficMonitor's config directory:
+
+```ini
+[Settings]
+AdminApiKey=sk-ant-admin-...
+MonthlyBudget=120
 FetchInterval=30
 ```
 
