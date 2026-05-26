@@ -170,7 +170,7 @@ const wchar_t* PluginDeepSeekBalance::GetInfo(PluginInfoIndex index)
     case TMI_COPYRIGHT:
         return L"Copyright (C) 2025";
     case TMI_VERSION:
-        return L"1.0";
+        return L"1.3";
     case TMI_URL:
         return L"https://github.com/Likhixang/PluginDeepSeekBalance";
     default:
