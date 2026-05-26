@@ -15,4 +15,4 @@ endif()
 # live in the project root.
 # ============================================================
 
-add_subdirectory(deepseek)
+add_subdirectory(DeepSeek)

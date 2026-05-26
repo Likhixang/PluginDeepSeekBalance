@@ -6,7 +6,7 @@ A collection of [TrafficMonitor](https://github.com/zhongyang219/TrafficMonitor)
 
 | Plugin | Directory | Description | Status |
 |--------|-----------|-------------|--------|
-| **DeepSeek Balance** | [`deepseek/`](deepseek/) | DeepSeek API account balance | ✅ Ready |
+| **DeepSeek Balance** | [`DeepSeek/`](DeepSeek/) | DeepSeek API account balance | ✅ Ready |
 | Codex | `codex/` | OpenAI Codex CLI usage/credits | 🚧 Planned |
 | Gemini | `gemini/` | Google Gemini API usage | 🚧 Planned |
 | Claude | `claude/` | Anthropic Claude API usage | 🚧 Planned |
