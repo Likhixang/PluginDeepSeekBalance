@@ -1,0 +1,11 @@
+build/
+*.user
+*.suo
+*.sdf
+*.log
+*.tlog
+.vs/
+Debug/
+Release/
+x64/
+Win32/
